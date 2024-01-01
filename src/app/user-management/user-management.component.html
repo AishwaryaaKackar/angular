@@ -1,0 +1,43 @@
+
+
+  <mat-table [dataSource]="users.users" multiTemplateDataRows class="mat-elevation-z8">
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+      <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <div class="example-element-detail" [@detailExpand]="element.expanded ? 'expanded' : 'collapsed'">
+          <table class="detail-table">
+            <tr>
+              <th>ID</th>
+              <th>FirstName</th>
+              <th>MaidenName</th>
+              <th>LastName</th>
+            </tr>
+            <tr>
+              <td>{{element.id}}</td>
+              <td><input value="{{element.firstName}}">
+                </td>
+              <td><input value="{{element.maidenName}}">
+                </td>
+              <td><input value="{{element.lastName}}">
+                </td>
+            </tr>
+            <tr>
+              <td><button mat-button color="basic" [class.spinner]="loading" [disabled]="loading" (click)="save()">Save</button> </td>
+              <td><button mat-button color="basic" (click)="cancel()">Cancel</button>  </td>
+            </tr>
+          </table>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+      [class.example-expanded-row]="element.expanded" (click)="toggleRow(element)">
+    </mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+  </mat-table>
